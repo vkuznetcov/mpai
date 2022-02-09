@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from skimage.exposure import histogram
+from skimage.io import imshow
 
 r = float(input('input R parameter: '))
 g = float(input('input G parameter: '))
@@ -11,13 +13,18 @@ grayscale = np.dot(original, [r, g, b])
 
 plt.imsave('lab1/cowboi_polutone.jpg', grayscale)
 
-fig, axes = plt.subplots(1, 2, figsize = (10, 5))
-ax = axes.ravel()
-
-ax[0].imshow(original)
-ax[0].set_title("Original")
-ax[1].imshow(grayscale)
-ax[1].set_title("GrayscaleMine")
+fig = plt.figure()
+fig.add_subplot(2,2,1)
+imshow(original)
+fig.add_subplot(2,2,2)
+imshow(grayscale)
+fig.add_subplot(2,2,3)
+hist_red, bins_red = histogram(original[:, :, 2])
+hist_green, bins_green = histogram(original[:, :, 1])
+hist_blue, bins_blue = histogram(original[:, :, 0])
+plt.plot(bins_green, hist_green, color='green', linestyle='-', linewidth=1)
+plt.plot(bins_red, hist_red, color='red', linestyle='-', linewidth=1)
+plt.plot(bins_blue, hist_blue, color='blue', linestyle='-', linewidth=1)
 
 fig.tight_layout()
 plt.show()
